@@ -17,7 +17,7 @@ from langchain_openai import ChatOpenAI
 # --------------------------------------------------
 
 PROJECT_NAME = "HomeSafe AI"
-STUDENT_NAME = "본인 이름"
+STUDENT_NAME = "황보종원"
 
 load_dotenv()
 
