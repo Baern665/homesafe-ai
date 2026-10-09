@@ -1,0 +1,62 @@
+[
+  {
+    "id": "moj-housing-lease-standard-form",
+    "title": "주택임대차 표준계약서 안내",
+    "agency": "법무부",
+    "url": "https://www.moj.go.kr/bbs/moj/118/564974/artclView.do",
+    "reviewed_at": "2026-10-09",
+    "kind": "official-guidance",
+    "keywords": ["주택임대차", "관리비", "특약", "표준계약서", "management fee", "special terms"],
+    "content": "법무부 게시물은 주택임대차 표준계약서의 2022년 개정본을 안내하며, 관리비 항목과 계약 체결 뒤 입주 전 임대인의 담보권 설정을 제한하는 특약을 신설했다고 설명합니다. 계약서 양식은 비용과 조건을 서로 확인하고 기록하는 참고자료로 활용할 수 있습니다. 양식에 항목이 있다고 해서 특정 관리비나 특약이 모든 계약에 적용되거나 법적 효력이 자동으로 정해진다는 뜻은 아닙니다. 이 페이지는 2022년 게시물이며 이번 검토일은 2026-10-09입니다. 검토일은 게시일이나 법령의 현행성 확인일을 의미하지 않습니다."
+  },
+  {
+    "id": "easylaw-check-registry-before-lease",
+    "title": "주택임대차 계약 전 등기부 확인",
+    "agency": "법제처 찾기쉬운 생활법령정보",
+    "url": "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?ccfNo=2&cciNo=1&cnpClsNo=1&csmSeq=629",
+    "reviewed_at": "2026-10-09",
+    "kind": "official-guidance",
+    "keywords": ["등기부", "소유자 확인", "임대차", "registry", "landlord identity"],
+    "content": "생활법령정보는 임대차계약 전에 부동산 등기부에서 소유자와 계약 상대방의 관계, 권리관계를 확인하라고 안내합니다. 소유자와 계약하는 경우 신분 확인 자료가 등기부 정보와 일치하는지 살피고, 대리인과 계약한다면 위임 권한을 확인하는 절차도 설명합니다. 주소와 동·호수가 등기 내용과 맞는지 확인하는 사례도 제시합니다. 등기부는 권리 확인의 기본 자료지만 그 자체가 모든 권리관계나 거래의 안전을 보증한다고 안내하지는 않습니다. 페이지에 표시된 정보 기준일과 법령 적용 여부를 계약 시점에 별도로 확인해야 합니다."
+  },
+  {
+    "id": "easylaw-housing-lease-reporting",
+    "title": "주택 임대차 계약 신고제",
+    "agency": "법제처 찾기쉬운 생활법령정보",
+    "url": "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?ccfNo=2&cciNo=2&cnpClsNo=5&csmSeq=629",
+    "reviewed_at": "2026-10-09",
+    "kind": "official-guidance",
+    "keywords": ["임대차 신고", "30일", "외국인", "lease reporting", "deadline"],
+    "content": "생활법령정보의 신고제 안내는 신고 대상인 주택임대차 계약을 체결한 경우 계약일부터 30일 안에 신고하도록 설명합니다. 신고지역 및 금액 기준도 제시하므로 모든 계약이 대상이라고 단정하지 말고 주소, 보증금·월세, 계약 형태와 갱신 여부를 확인해야 합니다. 안내에는 임대인과 임차인이 외국인인 경우에도 신고의무가 적용될 수 있고, 여권·외국인등록번호·거소신고번호 등 확인한 신분자료로 신고한다고 적혀 있습니다. 이 페이지에는 2026-09-15 기준이라고 표시되어 있으나, reviewed_at은 이번 검토일이며 법률의 현행성을 별도로 보증하지 않습니다. 개별 대상 여부와 기한은 관할 기관에 확인하세요."
+  },
+  {
+    "id": "seoul-foreign-resident-lease-counseling",
+    "title": "외국인 주민 대상 다국어 부동산 상담 안내",
+    "agency": "서울특별시",
+    "url": "https://english.seoul.go.kr/seoul-offers-lease-counseling-in-seven-languages-to-protect-international-residents-from-jeonse-fraud-in-small-apartments-villas",
+    "reviewed_at": "2026-10-09",
+    "kind": "official-service",
+    "keywords": ["외국인 주민", "임대차 상담", "다국어", "international residents", "housing counseling"],
+    "content": "서울시 안내는 서울외국인주민센터에서 외국인 주민을 위한 부동산 거래 상담을 제공한다고 소개합니다. 영등포구 센터에서 영어 상담과 함께 중국어, 베트남어, 몽골어, 러시아어, 우즈베크어, 우르두어 등 통역 지원을 안내하며, 임대차를 비롯한 부동산 거래와 관련 분쟁 상담이 포함됩니다. 안내된 신청 경로는 센터 방문, 전화 또는 이메일이며, 기본 상담 뒤 필요하면 공인중개사와 종합 상담을 연결하는 방식입니다. 게시물에 기재된 운영 요일·시간과 연락처는 변경될 수 있으므로 이용 전에 서울시 또는 센터 공식 채널에서 현재 정보를 확인하세요."
+  },
+  {
+    "id": "seoul-single-household-lease-help",
+    "title": "서울 1인가구 전월세 안심계약 도움서비스",
+    "agency": "서울특별시",
+    "url": "https://news.seoul.go.kr/welfare/archives/549525",
+    "reviewed_at": "2026-10-09",
+    "kind": "official-service",
+    "keywords": ["1인가구", "전월세", "무료 상담", "현장 동행", "single household", "lease help"],
+    "content": "서울시 안내에 따르면 서울에 거주하거나 거주 예정인 1인가구는 전월세 안심계약 도움서비스를 무료로 이용할 수 있습니다. 공인중개사 자격을 갖춘 주거안심매니저가 계약 관련 상담과 집보기 현장 동행 등을 지원하며, 신청은 서울시 1인가구 포털 또는 자치구 문의처를 통해 합니다. 서비스 안내는 매니저의 의견을 참고자료로 활용하라고 밝히고 있어, 이를 법률대리나 계약의 안전성 보증으로 간주해서는 안 됩니다. 운영 시간, 예약 조건, 참여 자치구와 연락처가 바뀔 수 있으므로 신청 전 최신 공지를 확인해야 합니다."
+  },
+  {
+    "id": "hug-ansimjeonse-app",
+    "title": "안심전세 앱 공식 안내",
+    "agency": "주택도시보증공사(HUG), Google Play 공식 앱 등록정보",
+    "url": "https://play.google.com/store/apps/details?hl=ko&id=org.khug.khmg",
+    "reviewed_at": "2026-10-09",
+    "kind": "official-service",
+    "keywords": ["안심전세", "HUG", "보증금", "위험진단", "jeonse", "deposit guarantee"],
+    "content": "HUG가 운영자로 표시된 안심전세 앱의 공식 스토어 설명에는 임차주택 위험진단, 전세계약 점검, 보증상품 신청·조회와 관련 상담 기능 등이 소개되어 있습니다. 일부 진단은 보유한 등기부 자료가 없으면 유료 결제가 필요할 수 있다고 안내하므로 앱의 모든 기능이 무료라고 볼 수 없습니다. 보증 가입과 앱 기능은 주택 유형, 신청자 및 상품 조건에 따라 달라질 수 있어 앱 설명만으로 가입 가능성을 판단하지 마세요. 상품 약관, 수수료, 대상 여부와 현재 제공 상태를 HUG 공식 채널에서 확인하세요. 스토어 설명은 서비스 안내이며 보증 승인이나 보증금 반환을 보장하지 않습니다."
+  }
+]
