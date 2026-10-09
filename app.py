@@ -39,13 +39,14 @@ st.markdown("""<style>
 </style>""", unsafe_allow_html=True)
 
 def setting(name, default=""):
-    value = os.getenv(name)
-    if value is not None:
-        return value
+    # Cloud Secrets is the operator-editable source of truth. A stale inherited
+    # environment value must not shadow a newly saved secret.
     try:
-        return st.secrets.get(name, default)
+        if name in st.secrets:
+            return st.secrets[name]
     except Exception:
-        return default
+        pass
+    return os.getenv(name, default)
 
 def bounded_setting(name, default, maximum):
     try:
@@ -101,7 +102,8 @@ try:
 except Exception:
     st.error("참고 자료를 불러오지 못했습니다. 오류 코드: SOURCE-CONFIG")
     st.stop()
-api_key = setting("OPENAI_API_KEY")
+configured_api_key = setting("OPENAI_API_KEY")
+api_key = configured_api_key.strip() if isinstance(configured_api_key, str) else ""
 model = setting("HOMESAFE_MODEL", "gpt-4.1-mini")
 budget = process_budget(bounded_setting("HOMESAFE_DAILY_CALL_LIMIT", 40, 300))
 ai = AIService(api_key, model, budget, st.session_state.session_id,

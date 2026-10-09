@@ -105,5 +105,39 @@ class UITests(unittest.TestCase):
             self.assertTrue("report" in app.session_state)
             self.assertFalse(any("다운로드 파일" in warn.value for warn in app.warning))
 
+
+class SettingsTests(unittest.TestCase):
+    def configured_app(self, secrets):
+        app=AppTest.from_file(str(APP),default_timeout=30)
+        app.secrets.update(secrets)
+        return app
+    def test_cloud_secret_wins_over_stale_environment(self):
+        with patch.dict(os.environ,{"OPENAI_API_KEY":"stale-environment-test-key"}):
+            app=self.configured_app({"OPENAI_API_KEY":"fresh-secret-test-key"})
+            with patch("hs_ai.AIService") as service:
+                app.run()
+                self.assertEqual(len(app.exception),0)
+                self.assertEqual(service.call_args.args[0],"fresh-secret-test-key")
+    def test_environment_fallback_when_secret_missing(self):
+        with patch.dict(os.environ,{"OPENAI_API_KEY":"environment-test-key"}):
+            app=self.configured_app({"other_setting":"value"})
+            with patch("hs_ai.AIService") as service:
+                app.run()
+                self.assertEqual(len(app.exception),0)
+                self.assertEqual(service.call_args.args[0],"environment-test-key")
+    def test_whitespace_is_trimmed_from_api_key(self):
+        app=self.configured_app({"OPENAI_API_KEY":"  whitespace-test-key \n"})
+        with patch("hs_ai.AIService") as service:
+            app.run()
+            self.assertEqual(len(app.exception),0)
+            self.assertEqual(service.call_args.args[0],"whitespace-test-key")
+    def test_explicit_empty_secret_disables_ai_without_env_fallback(self):
+        with patch.dict(os.environ,{"OPENAI_API_KEY":"stale-environment-test-key"}):
+            app=self.configured_app({"OPENAI_API_KEY":""})
+            with patch("hs_ai.AIService") as service:
+                app.run()
+                self.assertEqual(len(app.exception),0)
+                service.assert_not_called()
+
 if __name__ == "__main__":
     unittest.main()
