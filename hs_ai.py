@@ -79,9 +79,29 @@ class AIService:
             options["response_format"] = {"type": "json_object"}
         try:
             response = self.client.chat.completions.create(**options)
-        except Exception:
-            # Do not disclose provider errors or log document contents.
-            raise SafeError("AI 요청을 완료하지 못했습니다. 잠시 후 다시 시도하세요. 오류 코드: AI-REQUEST") from None
+        except Exception as error:
+            # Classify only safe status/type information, never provider messages or request bodies.
+            status = getattr(error, "status_code", None)
+            kind = type(error).__name__
+            if status == 401 or kind == "AuthenticationError":
+                message = "AI 인증 설정을 확인해야 합니다. 운영자가 API 키를 점검해야 합니다. 오류 코드: AI-AUTH"
+            elif status == 429 and getattr(error, "code", None) in {"insufficient_quota", "billing_hard_limit_reached"}:
+                message = "AI 계정의 사용 가능 크레딧이 부족합니다. 운영자가 결제·한도를 확인해야 합니다. 오류 코드: AI-QUOTA"
+            elif status == 429:
+                message = "AI 제공자의 요청 한도에 도달했습니다. 잠시 후 다시 시도하세요. 오류 코드: AI-RATE"
+            elif status == 404:
+                message = "설정한 AI 모델을 사용할 수 없습니다. 운영자가 모델 접근 권한을 확인해야 합니다. 오류 코드: AI-MODEL"
+            elif status == 403:
+                message = "AI 제공자 접근 권한을 확인해야 합니다. 오류 코드: AI-PERMISSION"
+            elif kind in {"APIConnectionError", "APITimeoutError"}:
+                message = "AI 제공자에 연결하지 못했습니다. 잠시 후 다시 시도하세요. 오류 코드: AI-NETWORK"
+            elif status == 400:
+                message = "AI 요청 형식이 제공자와 맞지 않습니다. 운영자가 설정을 확인해야 합니다. 오류 코드: AI-FORMAT"
+            elif isinstance(error, (TypeError, AttributeError)):
+                message = "AI 클라이언트 호환성을 확인해야 합니다. 오류 코드: AI-CLIENT"
+            else:
+                message = "AI 요청을 완료하지 못했습니다. 잠시 후 다시 시도하세요. 오류 코드: AI-REQUEST"
+            raise SafeError(message) from None
         finally:
             self.metrics["calls"] += 1
             self.metrics["seconds"] += round(time.monotonic() - start, 2)
