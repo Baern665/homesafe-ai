@@ -15,7 +15,7 @@ from hs_ai import AIService, SafeError
 from hs_report import report_to_pdf
 from hs_documents import extract_contract_files
 
-VERSION = "0.3.0"
+VERSION = "0.3.1"
 BRAND = "집계약 노트"
 ROOT = Path(__file__).resolve().parent
 LANGUAGES = ["한국어", "English", "日本語", "中文"]
@@ -108,8 +108,10 @@ with st.sidebar:
     if st.button("나의 문서·결과 지우기", use_container_width=True):
         reset_document_state(st.session_state, hashlib.sha256(uuid.uuid4().bytes).hexdigest())
         st.session_state.manual_input = ""
+        st.session_state.compare_before = ""
+        st.session_state.compare_after = ""
         st.session_state.upload_revision += 1
-        for k in ["compare_before", "compare_after", "compare_result", "compare_key", "consent_ai", "consent_ocr"]:
+        for k in ["compare_result", "compare_key", "consent_ai", "consent_ocr"]:
             st.session_state.pop(k, None)
         st.rerun()
     st.caption("삭제 시 이 세션의 문서와 결과를 제거합니다. AI 제공자에게 이미 전송된 데이터의 처리에는 해당 제공자 정책이 적용됩니다.")

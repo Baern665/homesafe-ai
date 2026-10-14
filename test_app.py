@@ -69,6 +69,16 @@ class UITests(unittest.TestCase):
         self.assertEqual(len(app.exception),0)
         self.assertEqual([t.label for t in app.tabs],["계약서 읽기","바뀐 내용 비교","이용 안내"])
         self.assertTrue(any("집계약 노트" in m.value for m in app.markdown))
+    def test_clear_removes_compare_inputs(self):
+        app=setup_app()
+        app.text_area(key="compare_before").set_value("관리비 80,000원")
+        app.text_area(key="compare_after").set_value("관리비 90,000원")
+        button(app,"변경 내용 비교").click().run()
+        button(app,"나의 문서·결과 지우기").click().run()
+        self.assertEqual(app.text_area(key="compare_before").value,"")
+        self.assertEqual(app.text_area(key="compare_after").value,"")
+        self.assertFalse("compare_result" in app.session_state)
+        self.assertEqual(len(app.exception),0)
     def test_compare_changed_input_clears_result(self):
         app=setup_app()
         app.text_area(key="compare_before").set_value("관리비 80,000원")
