@@ -20,7 +20,7 @@ def setup_app(ai=False):
         return AppTest.from_file(str(APP),default_timeout=30).run()
 
 def load_sample(app):
-    button(app,"합성 예시 계약서로 체험하기").click().run()
+    button(app,"예시 계약서로 시작하기").click().run()
     button(app,"계약서 내용 읽기").click().run()
     return app
 
@@ -50,15 +50,34 @@ class UITests(unittest.TestCase):
         self.assertEqual(len(app.exception),0)
         self.assertEqual(app.text_area(key="manual_input").value,"")
         self.assertFalse("pages" in app.session_state)
+    def test_text_mode_has_no_ocr_consent(self):
+        app=setup_app()
+        self.assertFalse(any(c.key == "consent_ocr" for c in app.checkbox))
     def test_ocr_consent_reset_for_changed_document(self):
         with patch.dict(os.environ,{"OPENAI_API_KEY":"test-key"}):
-            app=load_sample(AppTest.from_file(str(APP),default_timeout=30).run())
+            app=AppTest.from_file(str(APP),default_timeout=30).run()
+            app.radio[0].set_value("PDF · 사진 업로드").run()
             label="사진·스캔 페이지 원본의 OpenAI 전송을 허용합니다 (OCR에만 필요)"
             checkbox(app,label).check().run()
             self.assertTrue(checkbox(app,label).value)
-            app.text_area(key="manual_input").set_value("보증금: 20,000,000원").run()
+            app.radio[0].set_value("텍스트 직접 입력").run()
+            app.radio[0].set_value("PDF · 사진 업로드").run()
             self.assertFalse(checkbox(app,label).value)
             self.assertEqual(len(app.exception),0)
+    def test_brand_and_plain_navigation(self):
+        app=setup_app()
+        self.assertEqual(len(app.exception),0)
+        self.assertEqual([t.label for t in app.tabs],["계약서 읽기","바뀐 내용 비교","이용 안내"])
+        self.assertTrue(any("집계약 노트" in m.value for m in app.markdown))
+    def test_compare_changed_input_clears_result(self):
+        app=setup_app()
+        app.text_area(key="compare_before").set_value("관리비 80,000원")
+        app.text_area(key="compare_after").set_value("관리비 90,000원")
+        button(app,"변경 내용 비교").click().run()
+        self.assertTrue("compare_result" in app.session_state)
+        app.text_area(key="compare_after").set_value("관리비 100,000원").run()
+        self.assertFalse("compare_result" in app.session_state)
+        self.assertEqual(len(app.exception),0)
     def test_reread_resets_editors_and_confirmation(self):
         with patch.dict(os.environ,{"OPENAI_API_KEY":"test-key"}):
             app=load_sample(AppTest.from_file(str(APP),default_timeout=30).run())
