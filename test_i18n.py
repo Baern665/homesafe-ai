@@ -6,7 +6,7 @@ from unittest.mock import patch
 from streamlit.testing.v1 import AppTest
 from hs_i18n import LANGUAGES, LocalizedUI, catalog, translate, translate_error
 from hs_core import disclaimer
-from hs_report import report_to_markdown
+from hs_report import report_to_markdown, _md_block
 import test_report
 
 APP = Path(__file__).with_name("app.py")
@@ -38,7 +38,7 @@ class CatalogTests(unittest.TestCase):
         for language in LANGUAGES:
             result = report_to_markdown(report,language)
             self.assertIn(translate("# 계약 검토 보고서",language), result)
-            self.assertIn(original_quote, result)
+            self.assertIn(_md_block(original_quote), result)
             self.assertIn("₩10,000,000", result)
     def test_ui_keeps_state_keys_values_and_urls(self):
         class Target:
