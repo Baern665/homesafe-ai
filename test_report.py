@@ -3,6 +3,7 @@ import unittest
 import pymupdf as fitz
 
 from hs_report import report_to_markdown, report_to_pdf
+from hs_i18n import translate
 
 
 class ReportRenderingTests(unittest.TestCase):
@@ -43,19 +44,19 @@ class ReportRenderingTests(unittest.TestCase):
         }
 
     def test_pdf_language_variants_and_extractable_content(self):
-        for language in ("한국어", "English", "日本語", "中文"):
+        for language in ("한국어", "English", "日本語", "中文", "Español"):
             with self.subTest(language=language):
                 data = report_to_pdf(self.make_report(language), language)
                 self.assertTrue(data.startswith(b"%PDF-"))
                 doc = fitz.open(stream=data, filetype="pdf")
                 text = "\n".join(p.get_text() for p in doc)
-                self.assertIn("계약 검토 보고서", text)
-                self.assertIn("보증금", text)
+                self.assertIn(translate("계약 검토 보고서", language), text)
+                self.assertIn(translate("보증금", language), text)
                 self.assertIn("임대인은 계약 종료 시 보증금을 반환한다.", text)
                 self.assertIn("guide-lease-1", text)
                 self.assertIn("https://example.gov.kr/guidance/lease", text)
                 self.assertIn("2026-10-09", text)
-                self.assertIn("안내", text)
+                self.assertIn(translate("안내", language), text)
                 self.assertGreaterEqual(len(doc), 1)
                 doc.close()
 

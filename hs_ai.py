@@ -173,6 +173,7 @@ class AIService:
             raise SafeError("답변 근거 검증에 실패했습니다. 질문을 구체적으로 다시 입력하세요. 오류 코드: QA-EVIDENCE") from None
         if not result["evidence"] and not result["source_ids"]:
             refusals = {
+                "Español": "No he encontrado pruebas que permitan responder en este contrato ni en las guías disponibles. Añada la cláusula pertinente o consulte a un servicio oficial o a un profesional cualificado.",
                 "한국어": "현재 계약서와 참고 자료에서 이 질문에 답할 근거를 확인하지 못했습니다. 관련 조항을 추가하거나 공식 기관·전문가에게 확인하세요.",
                 "English": "I could not find supporting evidence in this contract or the supplied guidance. Add the relevant clause or check with an official service or qualified professional.",
                 "日本語": "現在の契約書と参考資料では、この質問に答える根拠を確認できません。関連条項を追加するか、公的機関・専門家に確認してください。",

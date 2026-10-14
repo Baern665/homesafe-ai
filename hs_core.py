@@ -20,12 +20,13 @@ MAX_PAGES = 12
 MAX_CHARS = 35000
 PII_NOTICE = "개인정보 가림은 정규식 기반 보조 기능입니다. OCR 오류, 비표준 표기, 문맥 속 이름·주소·계좌번호 등은 남을 수 있습니다. 원문과 가림 결과를 직접 확인하고 필요한 개인정보를 추가로 삭제한 후 전송하세요."
 DISCLAIMERS = {
+    "Español": "Este análisis de IA es solo orientativo, no asesoramiento jurídico. No se garantiza su exactitud ni actualidad. Antes de firmar, compruebe el contrato original y las fuentes oficiales y consulte a un profesional cualificado cuando sea necesario.",
     "한국어": "본 결과는 법률 자문이 아닌 참고용 AI 분석입니다. 정확성과 최신성을 보장하지 않으며, 계약 전 원문과 공식 자료를 확인하고 필요한 경우 전문가에게 상담하세요.",
     "English": "This is an AI analysis for reference, not legal advice. Accuracy and currency are not guaranteed. Check the original contract and official sources, and consult a qualified professional when needed before signing.",
     "日本語": "本結果は参考用のAI分析であり、法律上の助言ではありません。正確性や最新性は保証されません。契約前に原文と公的資料を確認し、必要に応じて専門家に相談してください。",
     "中文": "本结果为参考性AI分析，不构成法律意见，不保证准确性或时效性。签约前请核对合同原文和官方资料，必要时咨询专业人士。",
 }
-_ALIASES = {"ko": "한국어", "KO": "한국어", "Korean": "한국어", "en": "English", "EN": "English", "영어": "English", "ja": "日本語", "JA": "日本語", "일본어": "日本語", "zh": "中文", "ZH": "中文", "중국어": "中文"}
+_ALIASES = {"es": "Español", "ES": "Español", "Spanish": "Español", "스페인어": "Español", "ko": "한국어", "KO": "한국어", "Korean": "한국어", "en": "English", "EN": "English", "영어": "English", "ja": "日本語", "JA": "日本語", "일본어": "日本語", "zh": "中文", "ZH": "中文", "중국어": "中文"}
 
 
 def _language(language: str) -> str:

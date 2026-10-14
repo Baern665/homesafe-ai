@@ -4,6 +4,7 @@ import re
 from typing import Any
 from urllib.parse import urlsplit
 import pymupdf as fitz
+from hs_i18n import translate
 
 PAGE_W, PAGE_H = 595.276, 841.890
 MARGIN_X, MARGIN_TOP, MARGIN_BOTTOM = 48.0, 48.0, 48.0
@@ -97,19 +98,20 @@ def _md_block(s: str) -> str: return "\n".join(_md_escape(line) for line in s.sp
 def report_to_markdown(report: dict, language: str = "한국어") -> str:
     """Render complete bounded report as escaped, non-HTML Markdown."""
     d = _validate_report(report); language = _text(language,"language",80)
-    lines = ["# 계약 검토 보고서","","## 요약",_md_block(d["summary"]),"","## 주요 금액 및 조건"]
-    for label,value in d["fields"].items(): lines.append(f"- **{_md_escape(label)}**: {_md_block(value)}")
-    lines.extend(["","## 검토 사항"])
-    if not d["risks"]: lines.append("- 표시된 검토 사항이 없습니다.")
+    t = lambda value: translate(value, language)
+    lines = [t("# 계약 검토 보고서"),"",t("## 요약"),_md_block(d["summary"]),"",t("## 주요 금액 및 조건")]
+    for label,value in d["fields"].items(): lines.append(f"- **{_md_escape(t(label))}**: {_md_block(t(value))}")
+    lines.extend(["",t("## 검토 사항")])
+    if not d["risks"]: lines.append(t("- 표시된 검토 사항이 없습니다."))
     for r in d["risks"]:
-        lines.extend([f"### {_md_escape(r['title'])} ({RISK_LEVELS[r['level']]})",f"- 원문 (p. {r['page']}): {_md_block(r['quote'])}",f"- 설명: {_md_block(r['reason'])}"])
-        lines.extend(f"- 확인 질문: {_md_block(q)}" for q in r["questions"])
-        if r["source_ids"]: lines.append("- 출처 ID: " + ", ".join(_md_escape(x) for x in r["source_ids"]))
-    for key,title in (("missing","확인되지 않은 정보"),("checklist","확인 목록"),("limitations","한계")):
-        lines.extend(["","## "+title]); lines.extend(["- "+_md_block(x) for x in d[key]] or ["- 없음"])
-    lines.extend(["","## 출처"])
-    for s in d["sources"]: lines.append(f"- {_md_escape(s['title'])} (ID: {_md_escape(s['id'])}; {_md_escape(s['kind'])}; 검토일: {s['reviewed_at']}) - {_md_escape(s['url'])}")
-    lines.extend(["",f"문서 페이지: {d['pages_total']} | 누락 페이지: {', '.join(str(p) for p in d['pages_missing']) if d['pages_missing'] else '없음'}","","## 안내",_md_block(_disclaimer(language))])
+        lines.extend([f"### {_md_escape(r['title'])} ({t(RISK_LEVELS[r['level']])})",f"- {t('원문')} (p. {r['page']}): {_md_block(r['quote'])}",f"- {t('설명')}: {_md_block(r['reason'])}"])
+        lines.extend(f"- {t('확인 질문')}: {_md_block(q)}" for q in r["questions"])
+        if r["source_ids"]: lines.append("- " + t("출처 ID") + ": " + ", ".join(_md_escape(x) for x in r["source_ids"]))
+    for key,title in (("missing",t("확인되지 않은 정보")),("checklist",t("확인 목록")),("limitations",t("한계"))):
+        lines.extend(["","## "+t(title)]); lines.extend(["- "+_md_block(x) for x in d[key]] or [t("- 없음")])
+    lines.extend(["",t("## 출처")])
+    for s in d["sources"]: lines.append(f"- {_md_escape(t(s['title']))} (ID: {_md_escape(s['id'])}; {_md_escape(t(s['kind']))}; {t('검토일')}: {s['reviewed_at']}) - {_md_escape(s['url'])}")
+    lines.extend(["",translate("문서 페이지: {total} | 누락 페이지: {missing}", language, total=d["pages_total"], missing=", ".join(str(p) for p in d["pages_missing"]) or t("없음")),"",t("## 안내"),_md_block(_disclaimer(language))])
     return "\n".join(lines)+"\n"
 
 def _wrap(text: str, font: fitz.Font, max_width: float) -> list[str]:
@@ -127,6 +129,7 @@ def _wrap(text: str, font: fitz.Font, max_width: float) -> list[str]:
 def report_to_pdf(report: dict, language: str = "한국어") -> bytes:
     """Create readable, text-only A4 CJK PDF using PyMuPDF's bundled Korea font."""
     d=_validate_report(report); language=_text(language,"language",80)
+    t = lambda value: translate(value, language)
     # Measure and render using the exact same bundled font bytes. The built-in
     # CJK alias otherwise measures Latin text differently from PDF insertion.
     font=fitz.Font("korea")
@@ -145,23 +148,23 @@ def report_to_pdf(report: dict, language: str = "한국어") -> bytes:
     def heading(text):
         nonlocal y
         y+=4; draw(text,2); y+=2
-    draw("계약 검토 보고서"); heading("요약"); draw(d["summary"] or "(내용 없음)")
-    heading("주요 금액 및 조건")
-    for k,v in d["fields"].items(): draw(f"{k}: {v}")
-    heading("검토 사항")
-    if not d["risks"]: draw("표시된 검토 사항이 없습니다.")
+    draw(t("계약 검토 보고서")); heading(t("요약")); draw(d["summary"] or t("(내용 없음)"))
+    heading(t("주요 금액 및 조건"))
+    for k,v in d["fields"].items(): draw(f"{t(k)}: {t(v)}")
+    heading(t("검토 사항"))
+    if not d["risks"]: draw(t("표시된 검토 사항이 없습니다."))
     for i,r in enumerate(d["risks"],1):
-        draw(f"{i}. {r['title']} [{RISK_LEVELS[r['level']]}]"); draw(f"원문 (p. {r['page']}): {r['quote']}"); draw("설명: "+r["reason"])
-        for q in r["questions"]: draw("확인 질문: "+q)
-        if r["source_ids"]: draw("출처 ID: "+", ".join(r["source_ids"]))
-    for key,title in (("missing","확인되지 않은 정보"),("checklist","확인 목록"),("limitations","한계")):
-        heading(title)
-        for item in d[key] or ["없음"]: draw("- "+item)
-    heading("출처 및 검토일")
+        draw(f"{i}. {r['title']} [{t(RISK_LEVELS[r['level']])}]"); draw(f"{t('원문')} (p. {r['page']}): {r['quote']}"); draw(t("설명")+": "+r["reason"])
+        for q in r["questions"]: draw(t("확인 질문: ")+q)
+        if r["source_ids"]: draw(t("출처 ID: ")+", ".join(r["source_ids"]))
+    for key,title in (("missing",t("확인되지 않은 정보")),("checklist",t("확인 목록")),("limitations",t("한계"))):
+        heading(t(title))
+        for item in d[key] or [t("없음")]: draw("- "+item)
+    heading(t("출처 및 검토일"))
     for s in d["sources"]:
-        draw(f"{s['title']} (ID: {s['id']}; {s['kind']}; 검토일: {s['reviewed_at']})"); draw("URL: "+s["url"])
-    draw(f"문서 페이지: {d['pages_total']} | 누락 페이지: {', '.join(str(p) for p in d['pages_missing']) if d['pages_missing'] else '없음'}")
-    heading("안내"); draw(_disclaimer(language))
+        draw(f"{t(s['title'])} (ID: {s['id']}; {t(s['kind'])}; {t('검토일')}: {s['reviewed_at']})"); draw("URL: "+s["url"])
+    draw(translate("문서 페이지: {total} | 누락 페이지: {missing}", language, total=d["pages_total"], missing=", ".join(str(p) for p in d["pages_missing"]) or t("없음")))
+    heading(t("안내")); draw(_disclaimer(language))
     total=len(doc)
     for i,pg in enumerate(doc,1): pg.insert_text((PAGE_W-MARGIN_X-70,PAGE_H-20),f"{i} / {total}",fontname=PDF_FONT_NAME,fontsize=9,color=(0.25,0.25,0.25))
     result=doc.tobytes(garbage=4,deflate=True); doc.close(); return result
